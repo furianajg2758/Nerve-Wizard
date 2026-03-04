@@ -13,26 +13,14 @@ Things you may want to cover:
 * How to run the test suite
 * Services (job queues, cache servers, search engines, etc.)
 * Deployment instructions
-* ...
 
 
 
-Add database seeds and wizard branches for wrist
-
-
-
-Add CSS styling
-
-* List Groups: Perfect for your "Select Area" steps.
-* Forms \& Checkboxes: Styled specifically to be touch-friendly.
-* Progress Bars: Wicked works great with Bootstrap's .progress classes.
-* Cards: Ideal for displaying your "Nerve Matches" at the end.
-
-
+### To Do
 
 Upgrade to PostgresSQL
 
 
 
-Add GIT version control
+
 
