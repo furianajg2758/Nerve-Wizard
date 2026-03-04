@@ -1,0 +1,37 @@
+<% 
+  is_start = (step.to_s == "choose_areas")
+  is_results = (step.to_s == "results")
+  
+  display_total = is_start ? 6 : wizard_steps.count
+  current_index = wizard_steps.index(step) + 1
+  percentage = ((current_index.to_f / display_total) * 100).round
+%>
+
+<div class="container mt-4 mb-4">
+  <% if is_results %>
+    <%# This shows ONLY on the results page %>
+    <div class="alert alert-success border-0 shadow-sm mb-0">
+      <h4 class="alert-heading mb-0 text-center">Analysis Complete</h4>
+    </div>
+  <% else %>
+    <%# This shows on EVERY page EXCEPT the results page %>
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-muted small">Step <%= current_index %> of <%= display_total %></span>
+          <span class="text-primary fw-bold"><%= step.to_s.humanize %></span>
+        </div>
+        
+        <div class="progress" style="height: 10px;">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" 
+               role="progressbar" 
+               style="width: <%= percentage %>%;" 
+               aria-valuenow="<%= percentage %>" 
+               aria-valuemin="0" 
+               aria-valuemax="100">
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,45 @@
+<h2>Potential Nerve Involvement</h2>
+
+<% if @matches.any? %>
+  <% @matches.each do |result| %>
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between">
+        <strong><%= result[:nerve].name %></strong>
+        <span class="badge bg-primary">Score: <%= result[:score] %></span>
+      </div>
+      <div class="card-body">      
+        <% result[:details].each do |category, matches| %>
+          <% if matches.any? %>
+            <p class="mb-1">
+              <small class="text-muted"><%= category.to_s.upcase %> MATCH:</small><br>
+              <%= matches.map { |m| m.titleize }.join(", ") %>
+            </p>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+<% else %>
+  <div class="card border-dashed text-center p-5 shadow-sm">
+    <div class="mb-4">
+       <span style="font-size: 3rem;">📋</span>
+    </div>
+    <h2 class="fw-bold text-dark mb-3">No Clear Pattern Detected</h2>
+    <p class="text-muted mb-4" style="font-size: 1.1rem;">
+      Based on the symptoms selected, your pattern doesn't perfectly align with a specific peripheral nerve in our database. 
+    </p>
+    
+    <div class="alert alert-warning border-0 d-inline-block px-4">
+      <strong>Next Steps:</strong> Please consult a healthcare professional for a formal neurological examination.
+    </div>
+
+    <div class="mt-4">
+      <%= link_to "Restart Analysis", wizard_path(:choose_areas), class: "btn btn-outline-primary btn-lg px-5" %>
+    </div>
+  </div>
+<% end %> <%# --- This end closes the if/else block --- %>
+
+<div class="mt-4 text-center">
+  <%= link_to "Start Over", restart_path, class: "btn btn-link text-muted" %>
+</div>

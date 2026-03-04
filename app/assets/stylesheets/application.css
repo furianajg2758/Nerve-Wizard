@@ -1,0 +1,106 @@
+/*
+ * Manifest file for application.css
+ */
+
+@font-face {
+  font-family: 'Concourse';
+  src: url('/assets/concourse.woff2') format('woff2'); /* Added /assets/ prefix for Propshaft */
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --background-soft: #e2e8f1; 
+  --medical-blue: #2a4365;
+  --nerve-teal: #319795;
+  --card-border: #cbd5e0;
+}
+
+body {
+  font-family: 'Concourse', system-ui, -apple-system, sans-serif !important;
+  line-height: 1.6; 
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--background-soft);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1, h2, h3, .fw-bold {
+  font-family: 'Concourse', sans-serif;
+  color: #2c3e50;
+}
+
+
+.form-check-label {
+  font-family: 'Concourse', sans-serif;
+  cursor: pointer;
+  padding-left: 0.5rem;
+}
+
+.form-check {
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #a0aec0;
+  transition: all 0.2s ease;
+}
+
+.form-check:active {
+  transform: scale(0.98);
+  background-color: #ebf8ff;
+}
+
+.form-check:hover {
+  border-color: var(--nerve-teal);
+  background-color: #f0fff4; 
+}
+
+.card {
+  border: 1px solid var(--card-border) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.btn-primary {
+  background-color: var(--medical-blue);
+  border-color: var(--medical-blue);
+}
+
+.text-primary {
+  color: var(--medical-blue) !important;
+}
+
+.footer {
+  margin-top: 4rem;
+  background-color: #f8fafc;
+}
+
+.disclaimer-box {
+  /* High contrast but muted colors */
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.disclaimer-box p {
+  line-height: 1.4;
+  font-family: 'Concourse', sans-serif;
+  color: #718096 !important;
+}
+
+main {
+  flex: 1;
+}
+
+.meta-info {
+  font-family: 'Concourse', sans-serif;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.meta-info:hover {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}

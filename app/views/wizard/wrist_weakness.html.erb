@@ -1,0 +1,89 @@
+<div>
+  <% content_for(:affected_areas) { @concern.affected_areas&.titleize } %>
+</div>
+
+<div class="wizard-container">
+  <%= render "wizard/weakness" %>
+
+  <%= form_with model: @concern,
+                url: wizard_path(step),
+                method: :patch,
+                local: true,
+                authenticity_token: true,
+                data: { turbo: false } do |f| %>
+
+    <!-- Keep affected_area -->
+    <%= hidden_field_tag "concern[affected_areas]", @concern.affected_areas %>
+
+    <div class="list-group mb-4">
+
+      <% muscles = [
+        "elbow flexors",
+        "elbow extensors",
+        "forearm supinators",
+        "wrist flexors",
+        "wrist extensors",
+        "wrist ulnar deviators",
+        "thumb extensors",
+        "thumb adductors",
+        "finger abductors",
+        "finger adductors"
+      ] %>
+
+      <% muscles.each do |muscle| %>
+        <label class="list-group-item">
+          <%= check_box_tag "concern[weakness][]",
+                            muscle,
+                            @concern.weakness.include?(muscle),
+                            class: "form-check-input me-1 muscle-checkbox" %>
+          <%= muscle.titleize %>
+        </label>
+      <% end %>
+
+      <!-- None option -->
+      <label class="list-group-item list-group-item-light mt-3">
+        <%= check_box_tag "concern[weakness][]",
+                          "none",
+                          (@concern.weakness == ["none"]),
+                          class: "form-check-input me-1 none-checkbox" %>
+        None
+      </label>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="d-flex justify-content-between align-items-center">
+      <%= link_to "Back", wizard_path(:shoulder_sensory), class: "btn btn-outline-secondary" %>
+      <%= link_to "Start Over", restart_path, class: "btn btn-outline-secondary" %>
+      <%= f.submit "Continue", class: "btn btn-primary" %>
+    </div>
+
+  <% end %>
+</div>
+
+
+<!-- JS to enforce None ↔ Muscles mutual exclusivity -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const noneBox = document.querySelector(".none-checkbox");
+  const muscleBoxes = document.querySelectorAll(".muscle-checkbox");
+
+  // Selecting "None" unchecks all muscles
+  if (noneBox) {
+    noneBox.addEventListener("change", function() {
+      if (this.checked) {
+        muscleBoxes.forEach(cb => cb.checked = false);
+      }
+    });
+  }
+
+  // Selecting any muscle unchecks "None"
+  muscleBoxes.forEach(cb => {
+    cb.addEventListener("change", function() {
+      if (this.checked) {
+        noneBox.checked = false;
+      }
+    });
+  });
+});
+</script>

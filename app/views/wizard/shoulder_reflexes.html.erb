@@ -1,0 +1,83 @@
+<div>
+  <% content_for(:affected_areas) { @concern.affected_areas&.titleize } %>
+</div>
+
+<div class="wizard-container">
+  <%= render "wizard/reflexes" %>
+
+  <%= form_with model: @concern,
+                url: wizard_path(step),
+                method: :patch,
+                local: true,
+                authenticity_token: true,
+                data: { turbo: false } do |f| %>
+
+    <!-- Keep affected_areas transported across steps -->
+    <%= hidden_field_tag "concern[affected_areas]", @concern.affected_areas %>
+
+    <div class="list-group mb-4">
+
+      <% reflexes_options = [
+        "biceps brachii",
+        "brachioradialis"
+      ] %>
+
+      <% reflexes_options.each do |area| %>
+        <label class="list-group-item">
+          <%= check_box_tag "concern[reflexes][]",
+                            area,
+                            @concern.reflexes.include?(area),
+                            class: "form-check-input me-1 reflexes-checkbox" %>
+          <%= area.titleize %>
+        </label>
+      <% end %>
+
+      <!-- None option -->
+      <label class="list-group-item list-group-item-light mt-3">
+        <%= check_box_tag "concern[reflexes][]",
+                          "none",
+                          (@concern.reflexes == ["none"]),
+                          class: "form-check-input me-1 none-checkbox" %>
+        None
+      </label>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="d-flex justify-content-between align-items-center">
+      <%= link_to "Back", previous_wizard_path, class: "btn btn-outline-secondary" %>
+      <%= link_to "Start Over", restart_path, class: "btn btn-outline-secondary" %>
+      <%= f.submit "Continue", class: "btn btn-primary" %>
+    </div>
+
+  <% end %>
+</div>
+
+
+<!-- JS: Mutually exclusive "None" logic -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const noneBox = document.querySelector(".none-checkbox");
+  const reflexesBoxes = document.querySelectorAll(".reflexes-checkbox");
+
+  // Selecting "None" clears all other reflexes boxes
+  if (noneBox) {
+    noneBox.addEventListener("change", function() {
+      if (this.checked) {
+        reflexesBoxes.forEach(cb => cb.checked = false);
+      }
+    });
+  }
+
+  // Selecting any location clears "None"
+  reflexesBoxes.forEach(cb => {
+    cb.addEventListener("change", function() {
+      if (this.checked) {
+        noneBox.checked = false;
+      }
+    });
+  });
+
+});
+</script>
