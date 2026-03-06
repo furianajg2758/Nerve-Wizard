@@ -1,0 +1,277 @@
+# config/wizard_fields.yml
+# field_type → body_area → group_name → individual options
+
+#sensory loss options for forms
+
+sensory:
+  shoulder:
+    shoulder:
+      - "anterior shoulder"
+      - "posterior shoulder"
+      - "lateral shoulder"
+    upper arm:
+      - "anterior upper arm"
+      - "medial upper arm"
+    forearm:
+      - "anterior forearm"
+      - "medial forearm"
+  upper arm:
+    chest:
+      - "pectoral area"
+    back:
+      - "midscapular area"
+    shoulder:
+      - "anterior shoulder"
+      - "posterior shoulder"
+      - "lateral shoulder"
+    upper arm:
+      - "anterior upper arm"
+      - "posterior upper arm"
+      - "lateral upper arm"
+      - "medial upper arm"
+    forearm:
+      - "lateral forearm"
+      - "medial forearm"
+    hand:
+      - "radial hand"
+      - "ulnar hand"
+    fingers:
+      - "thumb"
+      - "index finger"
+      - "middle finger"
+      - "ring finger"
+      - "little finger"
+  elbow:
+    chest:
+      - "pectoral area"
+    back:
+      - "midscapular area"
+    shoulder:
+      - "anterior shoulder"
+      - "posterior shoulder"
+      - "lateral shoulder"
+    upper arm:
+      - "anterior upper arm"
+      - "posterior upper arm"
+      - "lateral upper arm"
+      - "medial upper arm"
+    elbow:
+      - "anterior elbow"
+      - "posterior elbow"
+      - "lateral elbow"
+      - "medial elbow"
+    forearm:
+      - "anterior forearm"
+      - "posterior forearm"
+      - "lateral forearm"
+      - "medial forearm"
+    hand:
+      - "radial hand"
+      - "medial hand"
+    fingers:
+      - "thumb"
+      - "index finger"
+      - "middle finger"
+      - "ring finger"
+      - "little finger"
+  forearm:
+    shouler:
+      - "lateral shoulder"
+    upper arm:
+      - "anterior upper arm"
+      - "lateral upper arm"
+      - "medial upper arm"
+    forearm:
+      - "anterior forearm"
+      - "posterior forearm"
+      - "lateral forearm"
+      - "medial forearm"
+    hand:
+      - "medial hand"
+    fingers:
+      - "thumb"
+      - "index finger"
+      - "middle finger"
+      - "ring finger"
+      - "little finger"
+  wrist:
+    shoulder:
+      - "lateral shoulder"
+    upper arm:
+      - "anterior upper arm"
+      - "posterior upper arm"
+      - "lateral upper arm"
+      - "medial upper arm"
+    elbow:
+      - "posterior elbow"
+      - "lateral elbow"
+      - "medial elbow"
+    forearm:
+      - "anterior forearm"
+      - "posterior forearm"
+      - "lateral forearm"
+      - "medial forearm"
+    wrist:
+      - "anterior wrist"
+      - "posterior wrist"
+      - "lateral wrist"
+      - "medial wrist"
+    hand:
+      - "radial hand"
+      - "medial hand"
+    fingers:
+      - "thumb"
+      - "index finger"
+      - "middle finger"
+      - "ring finger"
+      - "little finger"
+  hand:
+      - "medial upper arm"
+      - "lateral forearm"
+      - "medial forearm"
+      - "dorsum of hand"
+      - "radial hand"
+      - "ulnar hand"
+      - "thumb"
+      - "index finger"
+      - "middle finger"
+      - "ring finger"
+      - "little finger"
+  thigh:
+    back:
+      - "back"
+    groin:
+      - "groin"
+    buttock:
+      - "buttock"
+    thigh:
+      - "anterior thigh"
+      - "posterior thigh"
+      - "lateral thigh"
+      - "proximal medial thigh"
+      - "distal medial thigh"
+    knee:
+      - "anterior knee"
+      - "posterior knee"
+    lower leg:
+      - "anterior lower leg"
+      - "lateral lower leg"
+      - "medial lower leg"
+    foot:
+      - "dorsum of foot"
+      - "medial sole of foot"
+    toes:
+      - "big toe"
+      - "second toe"
+      - "third toe"
+  knee:
+    back:
+      - "back"
+    buttock:
+      - "buttock"
+    thigh:
+      - "anterior thigh"
+      - "posterior thigh"
+      - "lateral thigh"
+    knee:
+      - "anterior knee"
+      - "posterior knee"
+      - "lateral knee"
+    lower leg:
+      - "anterior lower leg"
+      - "posterior lower leg"
+      - "lateral lower leg"
+      - "medial lower leg"
+    foot:
+      - "dorsum of foot"
+      - "posteromedial foot"
+      - "medial sole of foot"
+    toes:
+      - "big toe"
+      - "second toe"
+      - "third toe"
+  lower leg:
+    back:
+      - "back"
+    buttock:
+      - "buttock"
+    thigh:
+      - "anterior thigh"
+      - "posterior thigh"
+      - "lateral thigh"
+    knee:
+      - "anterior knee"
+      - "posterior knee"
+      - "laterala knee"
+      - "medial knee"
+    lower leg:
+      - "anterior lower leg"
+      - "posterior lower leg"
+      - "lateral lower leg"
+      - "medial lower leg"
+    foot:
+      - "dorsum of foot"
+      - "lateral sole of foot"
+      - "medial sole of foot"
+      - "medial arch of foot"
+      - "heel"
+    toes:
+      - "big toe"
+      - "second toe"
+      - "third toe"
+      - "fifth toe"
+  ankle:
+    buttock:
+      - "buttock"
+    thigh:
+      - "posterior thigh"
+      - "lateral thigh"
+    knee:
+      - "lateral knee"
+      - "medial knee"
+    lower leg:
+      - "posterior lower leg"
+      - "lateral lower leg"
+      - "medial lower leg"
+    ankle:
+      - "posterior ankle"
+      - "lateral ankle"
+      - "medial ankle"
+    foot:
+      - "dorsum of foot"
+      - "lateral sole of foot"
+      - "medial sole of foot"
+      - "medial arch of foot"
+    toes:
+      - "webbing between toes one and two"
+      - "big toe"
+      - "second toe"
+      - "third toe"
+      - "fourth toe"
+      - "fifth toe"
+  foot:
+    buttock:
+      - "buttock"
+    thigh:
+      - "posterior thigh"
+      - "lateral thigh"
+    knee:
+      - "lateral knee"
+    lower leg:
+      - "posterior lower leg"
+      - "lateral lower leg"
+      - "medial lower leg"
+    foot:
+      - "dorsum of foot"
+      - "lateral sole of foot"
+      - "medial sole of foot"
+      - "medial arch of foot"
+      - "heel"
+    toes:
+      - "webbing between toes one and two"
+      - "big toe"
+      - "second toe"
+      - "third toe"
+      - "fourth toe"
+      - "fifth toe"
+  

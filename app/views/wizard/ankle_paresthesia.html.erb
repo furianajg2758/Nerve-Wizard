@@ -1,97 +1,34 @@
 <div>
-<% content_for :affected_areas do %><%= @concern.affected_areas&.titleize %><% end %>
+  <% content_for(:affected_areas) { @concern.affected_areas&.titleize } %>
 </div>
-
-<div class="wizard-step">
 
   <%= render "wizard/paresthesia" %>
 
-  <%= form_with model: @concern,
-                url: wizard_path(step),
-                method: :patch,
-                local: true,
-                authenticity_token: true,
-                data: { turbo: false } do |f| %>
+<% 
+  groups = {
+    "Knee" => ["medial knee"],
+    "Lower leg" => ["lateral lower leg", "medial lower leg"],
+    "Ankle" => ["lateral ankle", "medial ankle"],
+    "Foot" => ["dorsum of foot", "lateral sole of foot", "medial sole of foot", "medial arch of foot"],
+    "Toes" => ["webbing between toes one and two", "big toe", "second toe", "third toe", "fourth toe", "fifth toe"]
+  } 
+%>
 
-    <!-- Keep affected_area transported across steps -->
-    <%= hidden_field_tag "concern[affected_areas]", @concern.affected_areas %>
-
-    <div class="list-group mb-4">
-
-      <% paresthesia_options = [
-        "medial knee",
-        "lateral lower leg",
-        "medial lower leg",
-        "lateral ankle",
-        "medial ankle",
-        "dorsum of foot",
-        "lateral sole of foot",
-        "medial sole of foot",
-        "medial arch of foot",
-        "webbing between toes one and two",
-        "big toe",
-        "second toe",
-        "third toe",
-        "fourth toe",
-        "fifth toe"
-      ] %>
-
-      <% paresthesia_options.each do |area| %>
-        <label class="list-group-item">
-          <%= check_box_tag "concern[paresthesia][]",
-                            area,
-                            @concern.paresthesia.include?(area),
-                            class: "form-check-input me-1 paresthesia-checkbox" %>
-          <%= area.titleize %>
-        </label>
-      <% end %>
-
-      <!-- None option -->
-      <label class="list-group-item list-group-item-light mt-3">
-        <%= check_box_tag "concern[paresthesia][]",
-                          "none",
-                          (@concern.paresthesia == ["none"]),
-                          class: "form-check-input me-1 none-checkbox" %>
-        None
+<%= render layout: 'step_frame', locals: { field_name: 'paresthesia' } do %>
+  <% groups.each do |group_name, areas| %>
+    <div class="list-group-item bg-light text-muted fw-bold small text-uppercase py-2">
+      <%= group_name %>
+    </div>
+    <% areas.each do |area| %>
+      <label class="list-group-item list-group-item-action d-flex align-items-center py-3 ps-4" for="check_<%= area.parameterize %>">
+        <%= check_box_tag "concern[paresthesia][]", area, @concern.paresthesia.include?(area),
+            class: "form-check-input me-3 paresthesia-checkbox", id: "check_#{area.parameterize}" %>
+        <span><%= area.titleize %></span>
       </label>
-
-    </div>
-
-    <!-- Navigation -->
-    <div class="d-flex justify-content-between align-items-center">
-      <%= link_to "Back", previous_wizard_path, class: "btn btn-outline-secondary" %>
-      <%= link_to "Start Over", restart_path, class: "btn btn-outline-secondary" %>
-      <%= f.submit "Continue", class: "btn btn-primary" %>
-    </div>
-
+    <% end %>
   <% end %>
-</div>
+<% end %>
 
 
-<!-- JS: Mutually exclusive "None" logic -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-  const noneBox = document.querySelector(".none-checkbox");
-  const sensoryBoxes = document.querySelectorAll(".paresthesia-checkbox");
-
-  // Selecting "None" clears all other paresthesia boxes
-  if (noneBox) {
-    noneBox.addEventListener("change", function() {
-      if (this.checked) {
-        sensoryBoxes.forEach(cb => cb.checked = false);
-      }
-    });
-  }
-
-  // Selecting any location clears "None"
-  sensoryBoxes.forEach(cb => {
-    cb.addEventListener("change", function() {
-      if (this.checked) {
-        noneBox.checked = false;
-      }
-    });
-  });
-
-});
-</script>
+        
+        

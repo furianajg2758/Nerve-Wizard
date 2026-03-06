@@ -20,7 +20,3 @@ Things you may want to cover:
 
 Upgrade to PostgresSQL
 
-
-
-
-

@@ -1,0 +1,65 @@
+<%# app/views/wizard/_step_frame.html.erb %>
+
+<div class="wizard-container mt-4">
+  <% content_for(:affected_areas) { @concern.affected_areas&.titleize } %>
+  
+  <%= render "wizard/#{field_name}_description" rescue nil %>
+
+  <%= form_with model: @concern, url: wizard_path(step), method: :patch, local: true, data: { turbo: false } do |f| %>
+    <%= hidden_field_tag "concern[affected_areas]", @concern.affected_areas %>
+    <%= hidden_field_tag "concern[#{field_name}][]", "" %><%# Clears array if nothing is checked %>
+
+    <div class="list-group mb-4 custom-selection-list shadow-sm">
+      <%# This is where the specific checkboxes will go %>
+      <%= yield %>
+
+      <label class="list-group-item list-group-item-action d-flex align-items-center py-3 mt-3 border rounded shadow-sm" for="check_none">
+        <%= check_box_tag "concern[#{field_name}][]", "none", (@concern.send(field_name) == ["none"]), 
+            class: "form-check-input me-3 none-checkbox", id: "check_none" %>
+        <span class="fw-bold text-primary">None of the above</span>
+      </label>
+    </div>
+
+  <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+  <%= link_to "← Back", previous_wizard_path, class: "btn btn-outline-secondary px-4" %>
+
+  <div class="d-flex gap-2">
+    <%= link_to "Start Over", restart_path, 
+                class: "btn btn-outline-danger", 
+                data: { turbo_confirm: "Are you sure? This will clear all progress." } %>
+    
+    <%# Added 'text-white' to ensure readability regardless of theme overrides %>
+    <%= f.submit "Continue", class: "btn btn-primary text-white px-5 fw-bold" %>
+    </div>
+  </div>
+
+  <% end %>
+</div>
+
+<!-- JS: Mutually exclusive "None" logic -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const noneBox = document.querySelector(".none-checkbox");
+  const sensoryBoxes = document.querySelectorAll(".sensory-checkbox");
+
+  // Selecting "None" clears all other sensory boxes
+  if (noneBox) {
+    noneBox.addEventListener("change", function() {
+      if (this.checked) {
+        sensoryBoxes.forEach(cb => cb.checked = false);
+      }
+    });
+  }
+
+  // Selecting any location clears "None"
+  sensoryBoxes.forEach(cb => {
+    cb.addEventListener("change", function() {
+      if (this.checked) {
+        noneBox.checked = false;
+      }
+    });
+  });
+
+});
+</script>

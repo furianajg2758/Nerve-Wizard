@@ -139,8 +139,8 @@ NerveReference.create!(
 NerveReference.create!(
   name: "radial nerve",
   affected_areas: ["hand"],
-  paresthesia: ["posterior hand", "thumb", "index finger", "middle finger"],
-  sensory: ["posterior upper arm"],
+  paresthesia: ["dosum of hand", "thumb", "index finger", "middle finger"],
+  sensory: ["dorsum of hand", "thumb", "index finger", "middle finger"],
   weakness: ["elbow extensors", "forearm supinators", "wrist extensors", "thumb abductors"],
   reflexes: [],
   nerve_type: "mixed"

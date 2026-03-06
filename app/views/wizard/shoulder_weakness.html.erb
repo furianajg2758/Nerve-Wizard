@@ -2,82 +2,26 @@
   <% content_for(:affected_areas) { @concern.affected_areas&.titleize } %>
 </div>
 
-<div class="wizard-container">
   <%= render "wizard/weakness" %>
 
-  <%= form_with model: @concern,
-                url: wizard_path(step),
-                method: :patch,
-                local: true,
-                authenticity_token: true,
-                data: { turbo: false } do |f| %>
+<% 
+  groups = {
+    "Shoulder" => ["shoulder abductors", "shoulder lateral rotators"],
+    "Elbow" => ["elbow flexors"]
+  } 
+%>
 
-    <!-- Keep affected_area -->
-    <%= hidden_field_tag "concern[affected_areas]", @concern.affected_areas %>
-
-    <div class="list-group mb-4">
-
-      <% muscles = [
-        "biceps brachii",
-        "deltoid",
-        "infraspinatus",
-        "supraspinatus"
-      ] %>
-
-      <% muscles.each do |muscle| %>
-        <label class="list-group-item">
-          <%= check_box_tag "concern[weakness][]",
-                            muscle,
-                            @concern.weakness.include?(muscle),
-                            class: "form-check-input me-1 muscle-checkbox" %>
-          <%= muscle.titleize %>
-        </label>
-      <% end %>
-
-      <!-- None option -->
-      <label class="list-group-item list-group-item-light mt-3">
-        <%= check_box_tag "concern[weakness][]",
-                          "none",
-                          (@concern.weakness == ["none"]),
-                          class: "form-check-input me-1 none-checkbox" %>
-        None
+<%= render layout: 'step_frame', locals: { field_name: 'weakness' } do %>
+  <% groups.each do |group_name, areas| %>
+    <div class="list-group-item bg-light text-muted fw-bold small text-uppercase py-2">
+      <%= group_name %>
+    </div>
+    <% areas.each do |area| %>
+      <label class="list-group-item list-group-item-action d-flex align-items-center py-3 ps-4" for="check_<%= area.parameterize %>">
+        <%= check_box_tag "concern[weakness][]", area, @concern.weakness.include?(area),
+            class: "form-check-input me-3 weakness-checkbox", id: "check_#{area.parameterize}" %>
+        <span><%= area.titleize %></span>
       </label>
-
-    </div>
-
-    <!-- Navigation -->
-    <div class="d-flex justify-content-between align-items-center">
-      <%= link_to "Back", wizard_path(:shoulder_sensory), class: "btn btn-outline-secondary" %>
-      <%= link_to "Start Over", restart_path, class: "btn btn-outline-secondary" %>
-      <%= f.submit "Continue", class: "btn btn-primary" %>
-    </div>
-
+    <% end %>
   <% end %>
-</div>
-
-
-<!-- JS to enforce None ↔ Muscles mutual exclusivity -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const noneBox = document.querySelector(".none-checkbox");
-  const muscleBoxes = document.querySelectorAll(".muscle-checkbox");
-
-  // Selecting "None" unchecks all muscles
-  if (noneBox) {
-    noneBox.addEventListener("change", function() {
-      if (this.checked) {
-        muscleBoxes.forEach(cb => cb.checked = false);
-      }
-    });
-  }
-
-  // Selecting any muscle unchecks "None"
-  muscleBoxes.forEach(cb => {
-    cb.addEventListener("change", function() {
-      if (this.checked) {
-        noneBox.checked = false;
-      }
-    });
-  });
-});
-</script>
+<% end %> 

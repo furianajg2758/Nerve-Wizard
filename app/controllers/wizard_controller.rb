@@ -7,35 +7,38 @@ class WizardController < ApplicationController
   before_action :set_steps
   before_action :setup_wizard
 
-def restart
-  session[:concern_id] = nil
-  @concern = Concern.create!
-  session[:concern_id] = @concern.id
-  redirect_to wizard_path(:choose_areas)
-end
-
-def start
-  @concern = Concern.create!
-  session[:concern_id] = @concern.id
-  redirect_to wizard_path(:choose_areas)
-end
-
-def show
-  @concern = Concern.find(session[:concern_id])
-  puts @concern.inspect
-
-  if step.to_s == "results"
-    @matches = @concern.find_matches
+  def restart
+    session[:concern_id] = nil
+    session[:diagnostic_id] = nil  # Clear this too if it exists
+    @concern = Concern.create!
+    session[:concern_id] = @concern.id
+    redirect_to wizard_path(:choose_areas)
   end
 
-  render_wizard
-end
+  def start
+    @concern = Concern.create!
+    session[:concern_id] = @concern.id
+    redirect_to wizard_path(:choose_areas)
+  end
+
+  def show    
+
+    if step.to_s == "results"
+      @matches = @concern.find_matches
+    end
+    
+    render_wizard
+  end
 
 def update
-  @concern = Concern.find(session[:concern_id])
   if @concern.update(concern_params)
-    set_steps # Recalculate steps based on the NEW saved area
-    redirect_to wizard_path(next_step)
+    if step == :choose_areas
+      # After choosing an area, recalculate steps and go to the FIRST real step
+      set_steps
+      redirect_to wizard_path(steps[1]) # Go to paresthesia step directly
+    else
+      redirect_to wizard_path(next_step)
+    end
   else
     render_wizard @concern
   end
@@ -51,6 +54,7 @@ end
       session[:concern_id] = @concern.id
     end
 
+    # Initialize arrays
     %i[paresthesia sensory weakness reflexes].each do |field|
       @concern[field] ||= []
     end
@@ -60,8 +64,6 @@ def set_steps
   area = @concern&.affected_areas
   
   if area.present?
-    # .downcase ensures "Wrist" becomes "wrist"
-    # .strip removes any accidental hidden spaces
     clean_area = area.downcase.strip.gsub(' ', '_')
     
     self.steps = [
@@ -73,9 +75,11 @@ def set_steps
       :results
     ]
   else
+    # Just the first step when no area is selected
     self.steps = [:choose_areas]
   end
 end
+
 
   def concern_params
     p = params.require(:concern).permit(
@@ -92,4 +96,6 @@ end
 
     p
   end
+  
+  # Remove current_diagnostic method - it's not needed
 end

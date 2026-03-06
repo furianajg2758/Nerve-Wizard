@@ -2,82 +2,25 @@
   <% content_for(:affected_areas) { @concern.affected_areas&.titleize } %>
 </div>
 
-<div class="wizard-container">
   <%= render "wizard/reflexes" %>
 
-  <%= form_with model: @concern,
-                url: wizard_path(step),
-                method: :patch,
-                local: true,
-                authenticity_token: true,
-                data: { turbo: false } do |f| %>
+<% 
+  groups = { 
+    "Lower limb" => ["patellar", "Achilles"]
+  } 
+%>
 
-    <!-- Keep affected_areas transported across steps -->
-    <%= hidden_field_tag "concern[affected_areas]", @concern.affected_areas %>
-
-    <div class="list-group mb-4">
-
-      <% reflexes_options = [
-        "patellar",
-        "Achilles"
-      ] %>
-
-      <% reflexes_options.each do |area| %>
-        <label class="list-group-item">
-          <%= check_box_tag "concern[reflexes][]",
-                            area,
-                            @concern.reflexes.include?(area),
-                            class: "form-check-input me-1 reflexes-checkbox" %>
-          <%= area.titleize %>
-        </label>
-      <% end %>
-
-      <!-- None option -->
-      <label class="list-group-item list-group-item-light mt-3">
-        <%= check_box_tag "concern[reflexes][]",
-                          "none",
-                          (@concern.reflexes == ["none"]),
-                          class: "form-check-input me-1 none-checkbox" %>
-        None
+<%= render layout: 'step_frame', locals: { field_name: 'reflexes' } do %>
+  <% groups.each do |group_name, areas| %>
+    <div class="list-group-item bg-light text-muted fw-bold small text-uppercase py-2">
+      <%= group_name %>
+    </div>
+    <% areas.each do |area| %>
+      <label class="list-group-item list-group-item-action d-flex align-items-center py-3 ps-4" for="check_<%= area.parameterize %>">
+        <%= check_box_tag "concern[reflexes][]", area, @concern.reflexes.include?(area),
+            class: "form-check-input me-3 reflexes-checkbox", id: "check_#{area.parameterize}" %>
+        <span><%= area.titleize %></span>
       </label>
-
-    </div>
-
-    <!-- Navigation -->
-    <div class="d-flex justify-content-between align-items-center">
-      <%= link_to "Back", previous_wizard_path, class: "btn btn-outline-secondary" %>
-      <%= link_to "Start Over", restart_path, class: "btn btn-outline-secondary" %>
-      <%= f.submit "Continue", class: "btn btn-primary" %>
-    </div>
-
+    <% end %>
   <% end %>
-</div>
-
-
-<!-- JS: Mutually exclusive "None" logic -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-  const noneBox = document.querySelector(".none-checkbox");
-  const reflexesBoxes = document.querySelectorAll(".reflexes-checkbox");
-
-  // Selecting "None" clears all other reflexes boxes
-  if (noneBox) {
-    noneBox.addEventListener("change", function() {
-      if (this.checked) {
-        reflexesBoxes.forEach(cb => cb.checked = false);
-      }
-    });
-  }
-
-  // Selecting any location clears "None"
-  reflexesBoxes.forEach(cb => {
-    cb.addEventListener("change", function() {
-      if (this.checked) {
-        noneBox.checked = false;
-      }
-    });
-  });
-
-});
-</script>
+<% end %>
