@@ -7,6 +7,9 @@ class WizardController < ApplicationController
   before_action :set_steps
   before_action :setup_wizard
 
+  def start
+  end
+
   def restart
     session[:concern_id] = nil
     session[:diagnostic_id] = nil
