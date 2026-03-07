@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   # root "posts#index"
 
 Rails.application.routes.draw do
-  root "wizard#choose_areas"
+  root "wizard#restart"
 
   resources :wizard, only: [:show, :update] do
     collection do
