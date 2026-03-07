@@ -10,7 +10,7 @@
     <div class="list-group list-group-flush">
       <% 
         # Define keywords to remove for grouping
-        directions = ['anterior', 'posterior', 'lateral', 'medial', 'distal', 'proximal', 'radial', 'ulnar', 'dorsum of', 'sole of']
+        directions = ['anterior', 'posterior', 'lateral', 'medial', 'distal', 'proximal', 'radial', 'ulnar', 'dorsum of', 'sole of', "big", "second", "third", "fourth", "fifth"]
         
         grouped_options = @current_options.group_by do |opt|
           # Remove the direction keywords and clean up whitespace to find the "stem"
