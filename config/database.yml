@@ -12,7 +12,8 @@ test:
   database: nerve_wizard_test
 
 production:
-  <<: *default
-  database: nerve_wizard_production
-  username: <%= ENV["PGUSER"] %>
-  password: <%= ENV["PGPASSWORD"] %>
+  adapter: postgresql
+  encoding: unicode
+  # Render automatically provides DATABASE_URL; Rails will find it here:
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>

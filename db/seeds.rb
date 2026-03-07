@@ -404,7 +404,7 @@ NerveReference.create!(
 NerveReference.create!(
   name: "sural nerve",
   affected_areas: ["lower leg", "ankle", "foot"],
-  paresthesia: ["lateral lower leg", "lateral foot", "lateral ankle", "fifth toe"],
+  paresthesia: ["lateral lower leg", "lateral ankle", "lateral foot", "fifth toe"],
   sensory: ["lateral lower leg", "lateral ankle", "lateral foot", "fifth toe"],
   weakness: [],
   reflexes: [],

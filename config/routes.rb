@@ -13,10 +13,17 @@ Rails.application.routes.draw do
   # root "posts#index"
 
 Rails.application.routes.draw do
-  resources :wizard, only: [:show, :update]
+  root "wizard#start"
+
+  resources :wizard, only: [:show, :update] do
+    collection do
+      get :start
+      get :restart
+    end
+  end
+
   get "/restart", to: "wizard#restart"
-  # Start the wizard at the first step
-  root to: redirect('/wizard/choose_areas')
 end
+
 
 end
