@@ -12,9 +12,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-Rails.application.routes.draw do
-  root "wizard#restart"
-
   resources :wizard, only: [:show, :update] do
     collection do
       get :start
@@ -23,6 +20,8 @@ Rails.application.routes.draw do
   end
 
   get "/restart", to: "wizard#restart"
+
+  root "wizard#restart"
 end
 
 
