@@ -1,6 +1,4 @@
 # db/seeds.rb
-Symptom.destroy_all
-Nerve.destroy_all
 NerveReference.destroy_all
 
 ###
