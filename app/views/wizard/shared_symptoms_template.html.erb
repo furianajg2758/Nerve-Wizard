@@ -1,0 +1,39 @@
+<%# app/views/wizard/shared_symptoms_template.html.erb %>
+
+<%= form_with model: @concern, url: wizard_path, method: :put, local: true do |f| %>
+  <div class="step-header mb-4">
+    <h2 class="h3 mb-1"><%= @display_title %></h2>
+    <p class="text-muted italic"><%= @display_blurb %></p>
+  </div>
+
+  <%= render layout: 'step_frame', locals: { f: f, field_name: @type } do %>
+    <div class="list-group list-group-flush">
+      <% 
+        # Define keywords to remove for grouping
+        directions = ['anterior', 'posterior', 'lateral', 'medial', 'distal', 'proximal', 'radial', 'ulnar', 'dorsum of', 'sole of']
+        
+        grouped_options = @current_options.group_by do |opt|
+          # Remove the direction keywords and clean up whitespace to find the "stem"
+          stem = opt.downcase
+          directions.each { |dir| stem.gsub!(dir, '') }
+          stem.strip.titleize
+        end
+      %>
+
+      <% grouped_options.each do |group_name, options| %>
+        <div class="bg-light px-3 py-2 border-top border-bottom sticky-top" style="top: -1px; z-index: 10;">
+          <span class="text-uppercase small fw-bold text-muted"><%= group_name %></span>
+        </div>
+
+        <% options.each do |option| %>
+          <label class="list-group-item d-flex gap-3 py-3">
+            <%= f.check_box @type, { multiple: true, class: "form-check-input flex-shrink-0" }, option, nil %>
+            <span class="pt-1 form-checked-content">
+              <%= option.humanize %>
+            </span>
+          </label>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

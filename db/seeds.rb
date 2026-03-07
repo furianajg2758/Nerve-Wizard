@@ -40,7 +40,7 @@ NerveReference.create!(
   name: "C7 nerve root",
   affected_areas: ["upper arm", "elbow", "forearm", "wrist", "hand"],
   paresthesia: ["index finger", "middle finger", "ring finger"],
-  sensory: ["posterior upper arm", "lateral upper arm", "posterior elbow", "lateral forearm", "anterior wrist", "radial hand", "index finger", "middle finger", "ring finger"],
+  sensory: ["posterior upper arm", "lateral upper arm", "posterior elbow", "lateral elbow", "lateral forearm", "anterior wrist", "radial hand", "index finger", "middle finger", "ring finger"],
   weakness: ["elbow extensors", "wrist flexors"],
   reflexes: ["triceps"],
   nerve_type: "mixed"
@@ -50,7 +50,7 @@ NerveReference.create!(
   name: "C8 nerve root",
   affected_areas: ["upper arm", "elbow", "forearm", "wrist", "hand"],
   paresthesia: ["little finger"],
-  sensory: ["medial upper arm", "medial forearm", "medial wrist", "medial hand", "middle finger", "ring finger", "little finger"],
+  sensory: ["medial upper arm", "medial elbow", "medial forearm", "medial wrist", "medial hand", "middle finger", "ring finger", "little finger"],
   weakness: ["wrist ulnar deviators", "thumb extensors", "thumb adductors"],
   reflexes: ["triceps"],
   nerve_type: "mixed"
@@ -139,7 +139,7 @@ NerveReference.create!(
 NerveReference.create!(
   name: "radial nerve",
   affected_areas: ["hand"],
-  paresthesia: ["dosum of hand", "thumb", "index finger", "middle finger"],
+  paresthesia: ["dorsum of hand", "thumb", "index finger", "middle finger"],
   sensory: ["dorsum of hand", "thumb", "index finger", "middle finger"],
   weakness: ["elbow extensors", "forearm supinators", "wrist extensors", "thumb abductors"],
   reflexes: [],
@@ -202,7 +202,7 @@ NerveReference.create!(
 
 NerveReference.create!(
   name: "deep fibular nerve",
-  affected_areas: ["lower leg", "ankle", "foot"],
+  affected_areas: ["foot"],
   paresthesia: ["webbing between toes one and two"],
   sensory: ["webbing between toes one and two"],
   weakness: ["ankle dorsiflexors"],
@@ -254,7 +254,7 @@ NerveReference.create!(
   name: "L4 nerve root",
   affected_areas: ["buttock", "thigh", "knee", "lower leg", "ankle", "foot"],
   paresthesia: ["medial lower leg", "medial ankle"],
-  sensory: ["buttock", "lateral thigh", "medial lower leg", "dorsum of foot", "big toe"],
+  sensory: ["buttock", "lateral thigh", "medial lower leg", "medial ankle", "dorsum of foot", "big toe"],
   weakness: ["ankle dorsiflexors", "big toe extensors"],
   reflexes: [],
   nerve_type: "mixed"
@@ -265,7 +265,7 @@ NerveReference.create!(
   affected_areas: ["buttock", "thigh", "knee", "lower leg", "ankle", "foot"],
   paresthesia: ["lateral lower leg", "lateral ankle", "lateral foot", "big toe", "second toe", "third toe"],
   sensory: ["buttock", "posterior thigh", "lateral thigh", "lateral knee", "lateral lower leg", "dorsum of foot", "medial sole of foot", "big toe", "second toe", "third toe"],
-  weakness: ["hip abductors", "big toe extensors", "ankle everters", "ankle dorsiflexors"],
+  weakness: ["hip abductors", "ankle dorsiflexors", "ankle everters", "big toe extensors"],
   reflexes: [],
   nerve_type: "mixed"
 )
@@ -355,7 +355,7 @@ NerveReference.create!(
   name: "S2 nerve root",
   affected_areas: ["buttock", "thigh", "knee", "lower leg", "ankle", "foot"],
   paresthesia: ["lateral knee", "lateral lower leg", "lateral ankle", "heel"],
-  sensory: ["buttock", "posterior thigh", "posterior lower leg", "posterior ankle"],
+  sensory: ["buttock", "posterior thigh", "posterior knee", "posterior lower leg", "posterior ankle"],
   weakness: ["knee flexors", "ankle plantarflexors"],
   reflexes: ["Achilles"],
   nerve_type: "mixed"

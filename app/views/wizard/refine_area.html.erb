@@ -1,0 +1,22 @@
+<%# app/views/wizard/refine_area.html.erb %>
+
+<%= form_with model: @concern, url: wizard_path, method: :put, local: true do |f| %>
+  <div class="step-header mb-4">
+    <h2 class="h3 mb-1"><%= @display_title %></h2>
+    <p class="text-muted italic"><%= @display_blurb %></p>
+  </div>
+
+  <%# We pass 'f' into the layout so the radio buttons can use it %>
+  <%= render layout: 'step_frame', locals: { f: f, field_name: :specific_location } do %>
+    <div class="list-group">
+      <% @sub_regions.each do |region| %>
+        <label class="list-group-item d-flex gap-3 py-3">
+          <%= f.radio_button :specific_location, region, class: "form-check-input flex-shrink-0" %>
+          <span class="pt-1 form-checked-content">
+            <strong><%= region %></strong>
+          </span>
+        </label>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

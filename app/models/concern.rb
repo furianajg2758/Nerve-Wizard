@@ -53,7 +53,7 @@ end
   # ----------------------------
   # Main matching engine
   # ----------------------------
-  def find_matches
+ def find_matches
     NerveReference.all.map do |nerve|
       report = {
         nerve: nerve,
@@ -61,31 +61,27 @@ end
         details: { paresthesia: [], sensory: [], weakness: [], reflexes: [] }
       }
 
-      # Cleaned user + nerve data
+      # --- 1. HARD FILTER ---
       actual_user_weakness  = clean_list(self.weakness)
-      actual_nerve_weakness = clean_list(nerve.weakness)
+      user_has_motor        = actual_user_weakness.any?
 
-      user_has_motor = actual_user_weakness.any?
-
-      # HARD FILTER:
-      # If user selected weakness → eliminate sensory-only nerves
       if user_has_motor && nerve.nerve_type == "sensory"
         next nil
       end
 
-
-      # --- AREA MATCH (20 pts)
-      if Array(nerve.affected_areas).map(&:downcase).include?(self.affected_areas.to_s.downcase)
-        report[:score] += 20
+      # --- 2. AREA MATCH (Dynamic Scoring) ---
+      # Check for a match on the SPECIFIC location first
+      if nerve.specific_location.to_s.downcase == self.specific_location.to_s.downcase
+        report[:score] += 50 # High confidence for specific sub-area
+      elsif Array(nerve.affected_areas).map(&:downcase).include?(self.affected_areas.to_s.downcase)
+        report[:score] += 20 # Standard broad area match
       end
 
-
-      # --- CATEGORY SCORES
+      # --- 3. SYMPTOM CATEGORY SCORES ---
       report[:score] += score_category(self.paresthesia, nerve.paresthesia, 5, report[:details][:paresthesia])
       report[:score] += score_category(self.sensory,     nerve.sensory,     5, report[:details][:sensory])
-      report[:score] += score_weakness(self.weakness,    nerve.weakness,   10, report[:details][:weakness])
-      report[:score] += score_category(self.reflexes,    nerve.reflexes,   15, report[:details][:reflexes])
-
+      report[:score] += score_weakness(self.weakness,    nerve.weakness,    10, report[:details][:weakness])
+      report[:score] += score_category(self.reflexes,    nerve.reflexes,    15, report[:details][:reflexes])
 
       report
     end.compact.select { |r| r[:score] > 0 }.sort_by { |r| -r[:score] }

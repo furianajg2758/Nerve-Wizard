@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_01_222511) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_06_212138) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_222511) do
     t.text "paresthesia"
     t.text "reflexes"
     t.text "sensory"
+    t.string "specific_location"
     t.text "symptoms"
     t.datetime "updated_at", null: false
     t.text "weakness"
@@ -34,6 +35,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_01_222511) do
     t.text "paresthesia"
     t.text "reflexes"
     t.text "sensory"
+    t.string "specific_location"
     t.datetime "updated_at", null: false
     t.text "weakness"
   end
