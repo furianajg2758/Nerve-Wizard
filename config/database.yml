@@ -12,8 +12,13 @@ test:
   database: nerve_wizard_test
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  # Render automatically provides DATABASE_URL; Rails will find it here:
-  url: <%= ENV['DATABASE_URL'] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  primary: &primary_production
+    adapter: postgresql
+    encoding: unicode
+    url: <%= ENV['DATABASE_URL'] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  
+  # Add this block below:
+  cable:
+    <<: *primary_production
+    migrations_paths: db/cable_migrate
