@@ -1,38 +1,41 @@
-<h2>Potential Nerve Involvement</h2>
+<div class="results-container">
+  <h2 class="mb-4">Potential Nerve Involvement</h2>
 
-<% if @matches.any? %>
-  <% @matches.each do |result| %>
-    <div class="card mb-4">
-      <div class="card-header d-flex justify-content-between">
-        <strong><%= result[:nerve].name %></strong>
-        <span class="badge bg-primary">Score: <%= result[:score] %></span>
+  <% if @matches.any? %>
+    <%# 1. Logic to split the matches %>
+    <% 
+      top_score = @matches.first[:score]
+      best_matches = @matches.select { |m| m[:score] == top_score }
+      other_matches = @matches.reject { |m| m[:score] == top_score }.first(3)
+    %>
+
+    <%# --- BEST MATCH SECTION --- %>
+    <section class="mb-5">
+      <div class="alert alert-success border-0 shadow-sm mb-4">
+        <h4 class="alert-heading fw-bold mb-1">Best Match</h4>
+        <p class="mb-0">This <%= best_matches.count > 1 ? "group of nerves matches" : "nerve matches" %> your symptoms most closely.</p>
       </div>
-      <div class="card-body">      
-        <% result[:details].each do |category, matches| %>
-          <% if matches.any? %>
-            <p class="mb-1">
-              <small class="text-muted"><%= category.to_s.upcase %> MATCH:</small><br>
-              <%= matches.map { |m| m.titleize }.join(", ") %>
-            </p>
-          <% end %>
+
+      <% best_matches.each do |result| %>
+        <%= render "nerve_result_card", result: result, border_class: "border-primary shadow" %>
+      <% end %>
+    </section>
+
+    <%# --- NEXT BEST MATCHES SECTION --- %>
+    <% if other_matches.any? %>
+      <section>
+        <h5 class="text-muted mb-3">Next Best Matches</h5>
+        <% other_matches.each do |result| %>
+          <%= render "nerve_result_card", result: result, border_class: "border-light opacity-75" %>
         <% end %>
-      </div>
-    </div>
+      </section>
+    <% end %>
+
+  <% else %>
+    <%# ... your existing No Matches block ... %>
   <% end %>
 
-<% else %>
-  <div class="card border-dashed text-center p-5 shadow-sm">
-    <h2 class="fw-bold text-dark mb-3">No Clear Pattern Detected</h2>
-    <p class="text-muted mb-4" style="font-size: 1.1rem;">
-      Based on the symptoms selected, your pattern doesn't perfectly align with a specific nerve root or peripheral nerve in our database. 
-    </p>
-    
-    <div class="alert alert-warning border-0 d-inline-block px-4">
-      <strong>Next Steps:</strong> Please consult a healthcare professional for a formal neurological examination.
-    </div>
+  <div class="mt-5 text-center">
+    <%= link_to "Start Over", restart_path, class: "btn btn-outline-secondary px-4" %>
   </div>
-<% end %> <%# --- This end closes the if/else block --- %>
-
-<div class="mt-4 text-center">
-  <%= link_to "Start Over", restart_path, class: "btn btn-link text-muted" %>
 </div>

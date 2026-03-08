@@ -1,0 +1,19 @@
+<div class="card mb-3 <%= border_class %>">
+  <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <strong class="fs-5"><%= result[:nerve].name %></strong>
+    <% if border_class.include?("shadow") %>
+      <span class="badge rounded-pill bg-success text-uppercase">Highest Correlation</span>
+    <% end %>
+  </div>
+  
+  <div class="card-body">      
+    <% result[:details].each do |category, matches| %>
+      <% if matches.any? %>
+        <p class="mb-2">
+          <small class="text-muted fw-bold"><%= category.to_s.upcase %> EVIDENCE:</small><br>
+          <span class="text-dark"><%= matches.map { |m| m.titleize }.join(", ") %></span>
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
