@@ -488,7 +488,7 @@ NerveReference.create!(
   weakness: ["intrinsic foot muscles"],
   reflexes: [],
   nerve_type: "mixed"
-
+)
 
 NerveReference.create!(
   name: "medial cutaneous nerve of the thigh",
@@ -562,7 +562,7 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
-  name: "S3 nerve root",
+  name: "S4 nerve root",
   affected_areas: ["torso"],
   paresthesia: ["saddle area"],
   sensory: ["perineum", "genitals", "lower sacrum"],
