@@ -15,38 +15,40 @@ class WizardController < ApplicationController
     redirect_to wizard_path(:choose_areas)
   end
 
-def show
-  @concern = Concern.find(session[:concern_id])
-  @type = step.to_sym 
-
-  if @type == :refine_area
-    set_sub_regions
-    @display_title = "#{@concern.affected_areas&.titleize}: Specific Location"
-    @display_blurb = "Please narrow down exactly where you are feeling the symptoms."
+  def sources
   end
 
-  if [:paresthesia, :sensory, :weakness, :reflexes].include?(@type)
-    location_slug = (@concern.specific_location.presence || @concern.affected_areas)
-                      &.downcase&.strip&.gsub(' ', '_')
-    
-    location_name = (@concern.specific_location.presence || @concern.affected_areas)&.titleize
-    
-    @metadata = step_metadata_for(@type)
-    @display_title = "#{location_name}: #{@metadata[:title]}"
-    @display_blurb = @metadata[:blurb]
-    
-    @current_options = symptom_options_for(location_slug, @type)
+  def show
+    @concern = Concern.find(session[:concern_id])
+    @type = step.to_sym 
 
-    render "shared_symptoms_template" and return
+    if @type == :refine_area
+      set_sub_regions
+      @display_title = "#{@concern.affected_areas&.titleize}: Specific Location"
+      @display_blurb = "Please narrow down exactly where you are feeling the symptoms."
+    end
+
+    if [:paresthesia, :sensory, :weakness, :reflexes].include?(@type)
+      location_slug = (@concern.specific_location.presence || @concern.affected_areas)
+                       &.downcase&.strip&.gsub(' ', '_')
+      
+      location_name = (@concern.specific_location.presence || @concern.affected_areas)&.titleize
+      
+      @metadata = step_metadata_for(@type)
+      @display_title = "#{location_name}: #{@metadata[:title]}"
+      @display_blurb = @metadata[:blurb]
+      
+      @current_options = symptom_options_for(location_slug, @type)
+
+      render "shared_symptoms_template" and return
+    end
+
+    if @type == :results
+      @matches = @concern.find_matches || []
+    end
+
+    render_wizard
   end
-
-  if @type == :results
-    # Ensure @matches is an array, even if find_matches returns nil
-    @matches = @concern.find_matches || []
-  end
-
-  render_wizard
-end
 
   def update
     if @concern.update(concern_params)
@@ -73,15 +75,15 @@ end
 
   def set_sub_regions
     region_map = {
-      "head" => ["Head", "Face"]
-      "neck" => ["Neck"]
+      "head" => ["Head", "Face"],
+      "neck" => ["Neck"],
       "shoulder" => ["Anterior Shoulder", "Posterior Shoulder", "Lateral Shoulder"],
       "upper arm" => ["Anterior Upper Arm", "Posterior Upper Arm", "Lateral Upper Arm", "Medial Upper Arm"],
       "elbow" => ["Anterior Elbow", "Posterior Elbow", "Lateral Elbow", "Medial Elbow"],
       "forearm" => ["Anterior Forearm", "Posterior Forearm", "Lateral Forearm", "Medial Forearm"],
       "wrist" => ["Anterior Wrist", "Posterior Wrist", "Lateral Wrist", "Medial Wrist"],
       "hand" => ["Dorsum of Hand", "Radial Hand", "Medial Hand"],
-      "torso" => ["Torso"]
+      "torso" => ["Torso"],
       "thigh" => ["Anterior Thigh", "Posterior Thigh", "Lateral Thigh", "Distal Medial Thigh", "Proximal Medial Thigh"],
       "knee" => ["Anterior Knee", "Posterior Knee", "Lateral Knee", "Medial Knee"],
       "lower leg" => ["Anterior Lower Leg", "Posterior Lower Leg", "Lateral Lower Leg", "Medial Lower Leg"],
@@ -223,7 +225,7 @@ end
         "radial_hand" => ["elbow flexors", "elbow extensors", "forearm pronators", "forearm supinators", "wrist flexors", "wrist extensors", "wrist radial deviators", "thumb adductors"],
         "medial_hand" => ["wrist ulnar deviators", "thumb extensors", "thumb adductors"],
         "torso" => ["shoulder elevators", "bladder", "rectum"],
-        "hip" => []
+        "hip" => [], # FIXED: Added comma
         "anterior_thigh" => ["hip flexors", "hip adductors", "knee extensors"],
         "posterior_thigh" => ["hip abductors", "knee flexors", "ankle plantarflexors", "ankle dorsiflexors", "ankle everters", "big toe extensors"],
         "lateral_thigh" => ["hip abductors", "ankle dorsiflexors", "ankle everters", "big toe extensors"],
@@ -247,8 +249,8 @@ end
         "medial_sole_of_foot" => ["knee flexors", "ankle dorsiflexors", "ankle plantarflexors", "ankle everters", "ankle inverters", "intrinsic foot muscles"]
       },
       reflexes: {
-        "head" => []
-        "neck" => []
+        "head" => [],    # FIXED: Added comma
+        "neck" => [],    # FIXED: Added comma
         "anterior_shoulder" => ["biceps brachii", "brachioradialis"],
         "posterior_shoulder" => ["biceps brachii", "brachioradialis"],
         "lateral_shoulder" => ["biceps brachii", "brachioradialis"],
