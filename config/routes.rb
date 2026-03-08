@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   end
 
   get "/restart", to: "wizard#restart"
+  get "sources", to: "pages#sources"
 end
