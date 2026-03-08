@@ -16,6 +16,46 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "C1 nerve root",
+  affected_areas: ["head"],
+  paresthesia: [],
+  sensory: ["vertex of skull"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "C2 nerve root",
+  affected_areas: ["head"],
+  paresthesia: [],
+  sensory: ["temple", "forehead", "occiput"],
+  weakness: ["neck flexors"],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "C3 nerve root",
+  affected_areas: ["head", "neck"],
+  paresthesia: ["cheek", "side of neck"],
+  sensory: ["posterior cheek", "temple", "mandible", "anterior neck", "posterior neck", "side of neck"],
+  weakness: ["neck side flexors"],
+  reflexes: [],
+  nerve_type: "mixed"
+)
+
+NerveReference.create!(
+  name: "C4 nerve root",
+  affected_areas: ["torso"],
+  paresthesia: ["horizontal band along clavicle and upper scapula"],
+  sensory: ["clavicular area", "upper scapular area"],
+  weakness: ["shoulder elevators"],
+  reflexes: [],
+  nerve_type: "mixed"
+)
+
+NerveReference.create!(
   name: "C5 nerve root",
   affected_areas: ["shoulder", "upper arm", "elbow", "forearm"],
   paresthesia: [],
@@ -56,6 +96,36 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "dorsal rami of C3-5",
+  affected_areas: ["neck"],
+  paresthesia: ["posterior neck"],
+  sensory: ["posterior neck"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "greater auricular nerve",
+  affected_areas: ["head"],
+  paresthesia: ["ear"],
+  sensory: ["ear"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "greater occipital nerve",
+  affected_areas: ["head"],
+  paresthesia: ["posterior head"],
+  sensory: ["posterior head"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
   name: "lateral antebrachial cutaneous nerve",
   affected_areas: ["elbow", "forearm", "wrist"],
   paresthesia: ["lateral elbow", "anterior forearm", "lateral forearm", "lateral wrist"],
@@ -66,10 +136,40 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "lesser auricular nerve",
+  affected_areas: ["head"],
+  paresthesia: ["side of head"],
+  sensory: ["side of head"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
   name: "lower lateral brachial cutaneous nerve",
   affected_areas: ["upper arm", "elbow"],
   paresthesia: ["lateral upper arm", "lateral elbow"],
   sensory: ["lateral upper arm", "lateral elbow"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "mandibular nerve",
+  affected_areas: ["head"],
+  paresthesia: ["temple", "mandible"],
+  sensory: ["temple", "mandible"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "maxillary nerve",
+  affected_areas: ["head"],
+  paresthesia: ["cheek", "upper lip"],
+  sensory: ["cheek", "upper lip"],
   weakness: [],
   reflexes: [],
   nerve_type: "sensory"
@@ -116,6 +216,16 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "ophthalmic nerve",
+  affected_areas: ["head"],
+  paresthesia: ["vertex of skull", "forehead", "nose"],
+  sensory: ["vertex of skull", "forehead", "nose"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
   name: "posterior antebrachial cutaneous nerve",
   affected_areas: ["elbow", "forearm", "wrist"],
   paresthesia: ["posterior elbow", "posterior forearm", "posterior wrist"],
@@ -146,6 +256,16 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "suprascapular nerve",
+  affected_areas: ["neck", "torso"],
+  paresthesia: ["side of neck", "clavicular area"],
+  sensory: ["side of neck", "clavicular area"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
   name: "T1 nerve root",
   affected_areas: ["elbow", "forearm", "wrist", "hand"],
   paresthesia: [],
@@ -157,13 +277,44 @@ NerveReference.create!(
 
 NerveReference.create!(
   name: "T2 nerve root",
-  affected_areas: ["pectoral area", "midscapular area", "upper arm", "elbow"],
+  affected_areas: ["torso", "upper arm", "elbow"],
   paresthesia: [],
   sensory: ["pectoral area", "midscapular area", "medial upper arm", "medial elbow"],
   weakness: [],
   reflexes: [],
   nerve_type: "sensory"
 )
+
+NerveReference.create!(
+  name: "T3-6 nerve roots",
+  affected_areas: ["torso"],
+  paresthesia: [],
+  sensory: ["upper thorax"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "T5-7 nerve roots",
+  affected_areas: ["torso"],
+  paresthesia: [],
+  sensory: ["costal margin"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "T8-12 nerve roots",
+  affected_areas: ["torso"],
+  paresthesia: [],
+  sensory: ["abdomen", "low back"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
 
 NerveReference.create!(
   name: "ulnar nerve",
@@ -220,6 +371,36 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "genitofemoral nerve",
+  affected_areas: ["hip"],
+  paresthesia: ["anterior hip"],
+  sensory: ["anterior hip"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "iliohypogastric nerve",
+  affected_areas: ["hip"],
+  paresthesia: ["lateral hip"],
+  sensory: ["lateral hip"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "ilioinguinal nerve",
+  affected_areas: ["torso"],
+  paresthesia: ["groin"],
+  sensory: ["groin"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
   name: "intermediate cutaneous nerve of the thigh",
   affected_areas: ["thigh", "knee"],
   paresthesia: ["anterior thigh", "anterior knee"],
@@ -230,10 +411,20 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "L1 nerve root",
+  affected_areas: ["torso", "hip"],
+  paresthesia: ["groin"],
+  sensory: ["low back", "groin", "greater trochanter"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
   name: "L2 nerve root",
   affected_areas: ["back", "thigh"],
   paresthesia: ["anterior thigh"],
-  sensory: ["back", "anterior thigh"],
+  sensory: ["low back", "anterior thigh"],
   weakness: ["hip flexors", "hip adductors"],
   reflexes: [],
   nerve_type: "mixed"
@@ -243,7 +434,7 @@ NerveReference.create!(
   name: "L3 nerve root",
   affected_areas: ["back", "buttock", "thigh", "knee", "lower leg"],
   paresthesia: ["medial knee", "anterior lower leg"],
-  sensory: ["back", "buttock", "anterior thigh", "anterior knee", "medial lower leg"],
+  sensory: ["low back", "buttock", "anterior thigh", "anterior knee", "medial lower leg"],
   weakness: ["hip flexors", "knee extensors"],
   reflexes: ["patellar"],
   nerve_type: "mixed"
@@ -297,7 +488,7 @@ NerveReference.create!(
   weakness: ["intrinsic foot muscles"],
   reflexes: [],
   nerve_type: "mixed"
-)
+
 
 NerveReference.create!(
   name: "medial cutaneous nerve of the thigh",
@@ -362,12 +553,22 @@ NerveReference.create!(
 
 NerveReference.create!(
   name: "S3 nerve root",
-  affected_areas: ["groin", "thigh"],
+  affected_areas: ["torso", "thigh"],
   paresthesia: [],
   sensory: ["groin", "distal medial thigh", "proximal medial thigh"],
   weakness: [],
   reflexes: [],
   nerve_type: "sensory"
+)
+
+NerveReference.create!(
+  name: "S3 nerve root",
+  affected_areas: ["torso"],
+  paresthesia: ["saddle area"],
+  sensory: ["perineum", "genitals", "lower sacrum"],
+  weakness: ["bladder", "rectum"],
+  reflexes: [],
+  nerve_type: "mixed"
 )
 
 NerveReference.create!(
@@ -401,6 +602,16 @@ NerveReference.create!(
 )
 
 NerveReference.create!(
+  name: "subcostal nerve",
+  affected_areas: ["hip"],
+  paresthesia: ["lateral hip"],
+  sensory: ["lateral hip"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
+NerveReference.create!(
   name: "sural nerve",
   affected_areas: ["lower leg", "ankle", "foot"],
   paresthesia: ["lateral lower leg", "lateral ankle", "lateral foot", "fifth toe"],
@@ -419,5 +630,16 @@ NerveReference.create!(
   reflexes: [],
   nerve_type: "mixed"
 )
+
+NerveReference.create!(
+  name: "transverse cutaneous nerve of neck",
+  affected_areas: ["neck"],
+  paresthesia: ["anterior neck"],
+  sensory: ["anterior neck"],
+  weakness: [],
+  reflexes: [],
+  nerve_type: "sensory"
+)
+
 
 puts "Successfully seeded #{NerveReference.count} nerve references!"

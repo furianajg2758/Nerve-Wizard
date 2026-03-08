@@ -73,12 +73,15 @@ end
 
   def set_sub_regions
     region_map = {
+      "head" => ["Head", "Face"]
+      "neck" => ["Neck"]
       "shoulder" => ["Anterior Shoulder", "Posterior Shoulder", "Lateral Shoulder"],
       "upper arm" => ["Anterior Upper Arm", "Posterior Upper Arm", "Lateral Upper Arm", "Medial Upper Arm"],
       "elbow" => ["Anterior Elbow", "Posterior Elbow", "Lateral Elbow", "Medial Elbow"],
       "forearm" => ["Anterior Forearm", "Posterior Forearm", "Lateral Forearm", "Medial Forearm"],
       "wrist" => ["Anterior Wrist", "Posterior Wrist", "Lateral Wrist", "Medial Wrist"],
       "hand" => ["Dorsum of Hand", "Radial Hand", "Medial Hand"],
+      "torso" => ["Torso"]
       "thigh" => ["Anterior Thigh", "Posterior Thigh", "Lateral Thigh", "Distal Medial Thigh", "Proximal Medial Thigh"],
       "knee" => ["Anterior Knee", "Posterior Knee", "Lateral Knee", "Medial Knee"],
       "lower leg" => ["Anterior Lower Leg", "Posterior Lower Leg", "Lateral Lower Leg", "Medial Lower Leg"],
@@ -97,6 +100,8 @@ end
   def symptom_options_for(location, type)
     maps = {
       paresthesia: {
+        "head" => ["vertex of skull", "posterior head", "side of head", "forehead", "temple", "nose", "cheek", "ear", "upper lip", "mandible", "side of neck"],
+        "neck" => ["cheek", "posterior neck", "side of neck", "clavicular area"],
         "anterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "medial upper arm", "medial elbow", "medial forearm"],
         "posterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder"],
         "lateral_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder"],
@@ -119,6 +124,8 @@ end
         "dorsum_of_hand" => ["dorsum of hand", "thumb", "index finger", "middle finger"],
         "radial_hand" => ["radial hand", "thumb", "index finger", "middle finger", "ring finger"],
         "medial_hand" => ["little finger"],
+        "torso" => ["side of neck", "clavicular area", "horizontal band along clavicle and upper scapula", "groin", "saddle area"],
+        "hip" => ["groin", "anterior hip", "lateral hip"],
         "anterior_thigh" => ["anterior thigh", "anterior knee", "medial knee", "anterior lower leg"],
         "posterior_thigh" => ["posterior thigh", "posterior knee", "lateral knee", "posterior lower leg", "lateral lower leg", "lateral ankle", "lateral foot", "heel", "big toe", "second toe", "third toe"],
         "lateral_thigh" => ["lateral thigh", "medial lower leg", "medial ankle"],
@@ -142,6 +149,8 @@ end
         "medial_sole_of_foot" => ["lateral lower leg", "lateral ankle", "dorsum of foot", "lateral sole of foot", "medial sole of foot", "webbing between toes one and two"]
       },
       sensory: {
+        "head" => ["vertex of skull", "posterior head", "side of head", "temple", "forehead", "cheek", "nose", "ear", "occiput", "upper lip", "mandible", "anterior neck", "posterior neck", "side of neck"],
+        "neck" => ["posterior cheek", "temple", "mandible", "anterior neck", "posterior neck", "side of neck"],
         "anterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior upper arm", "medial upper arm", "anterior elbow", "medial elbow", "anterior forearm", "medial forearm"],
         "posterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior elbow", "anterior upper arm", "anterior forearm"],
         "lateral_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior elbow", "anterior upper arm", "anterior forearm"],
@@ -164,6 +173,8 @@ end
         "dorsum_of_hand" => ["dorsum of hand", "thumb", "index finger", "middle finger"],
         "radial_hand" => ["anterior upper arm", "posterior upper arm", "lateral upper arm", "posterior elbow", "lateral elbow", "medial elbow", "lateral forearm", "anterior wrist", "lateral wrist", "radial hand", "thumb", "index finger", "middle finger", "ring finger"],
         "medial_hand" => ["medial wrist", "medial hand", "ring finger", "little finger"],
+        "torso" => ["side of neck", "clavicular area", "groin", "perineum", "genitals", "lower sacrum", "clavicular area", "upper thorax", "pectoral area", "costal margin", "abdomen", "low back", "upper scapular area", "midscapular area", "medial upper arm", "medial elbow", "greater trochanter"],
+        "hip" => ["low back", "groin", "greater trochanter", "anterior hip", "lateral hip"],
         "anterior_thigh" => ["back", "buttock", "anterior thigh", "anterior knee", "anterior lower leg", "medial lower leg"],
         "posterior_thigh" => ["buttock", "posterior thigh", "lateral thigh", "posterior knee", "lateral knee", "posterior lower leg", "lateral lower leg", "posterior ankle", "dorsum of foot", "medial sole of foot", "big toe", "second toe", "third toe"],
         "lateral_thigh" => ["buttock", "posterior thigh", "lateral thigh", "lateral lower leg", "medial lower leg", "medial ankle", "dorsum of foot", "medial sole of foot", "big toe", "second toe", "third toe"],
@@ -187,6 +198,8 @@ end
         "medial_sole_of_foot" => ["posterior lower leg", "lateral lower leg", "medial lower leg", "lateral ankle", "dorsum of foot", "lateral sole of foot", "medial sole of foot", "webbing between toes one and two"]
       },
       weakness: {
+        "head" => ["neck flexors", "neck side flexors"],
+        "neck" => ["neck side flexors"],
         "anterior_shoulder" => ["shoulder abductors", "shoulder lateral rotators"],
         "posterior_shoulder" => ["shoulder abductors", "shoulder lateral rotators"],
         "lateral_shoulder" => ["shoulder abductors", "shoulder lateral rotators"],
@@ -209,6 +222,8 @@ end
         "dorsum_of_hand" => ["elbow extensors", "forearm supinators", "wrist extensors", "thumb abductors", "finger abductors", "finger adductors"],
         "radial_hand" => ["elbow flexors", "elbow extensors", "forearm pronators", "forearm supinators", "wrist flexors", "wrist extensors", "wrist radial deviators", "thumb adductors"],
         "medial_hand" => ["wrist ulnar deviators", "thumb extensors", "thumb adductors"],
+        "torso" => ["shoulder elevators", "bladder", "rectum"],
+        "hip" => []
         "anterior_thigh" => ["hip flexors", "hip adductors", "knee extensors"],
         "posterior_thigh" => ["hip abductors", "knee flexors", "ankle plantarflexors", "ankle dorsiflexors", "ankle everters", "big toe extensors"],
         "lateral_thigh" => ["hip abductors", "ankle dorsiflexors", "ankle everters", "big toe extensors"],
@@ -232,6 +247,8 @@ end
         "medial_sole_of_foot" => ["knee flexors", "ankle dorsiflexors", "ankle plantarflexors", "ankle everters", "ankle inverters", "intrinsic foot muscles"]
       },
       reflexes: {
+        "head" => []
+        "neck" => []
         "anterior_shoulder" => ["biceps brachii", "brachioradialis"],
         "posterior_shoulder" => ["biceps brachii", "brachioradialis"],
         "lateral_shoulder" => ["biceps brachii", "brachioradialis"],
@@ -254,6 +271,8 @@ end
         "dorsum_of_hand" => [],
         "radial_hand" => ["biceps brachii", "brachioradialis", "triceps"],
         "medial_hand" => ["triceps"],
+        "torso" => [],
+        "hip" => [],
         "anterior_thigh" => ["patellar"],
         "posterior_thigh" => ["Achilles"],
         "lateral_thigh" => [],
