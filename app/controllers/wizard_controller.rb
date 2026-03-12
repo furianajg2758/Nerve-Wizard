@@ -104,7 +104,7 @@ end
       "head" => ["Head", "Face"],
       "neck" => ["Neck"],
       "shoulder" => ["Anterior Shoulder", "Posterior Shoulder", "Lateral Shoulder"],
-      "upper arm" => ["Anterior Upper Arm", "Posterior Upper Arm", "Lateral Upper Arm", "Medial Upper Arm"],
+      "arm" => ["Anterior Upper Arm", "Posterior Upper Arm", "Lateral Upper Arm", "Medial Upper Arm"],
       "elbow" => ["Anterior Elbow", "Posterior Elbow", "Lateral Elbow", "Medial Elbow"],
       "forearm" => ["Anterior Forearm", "Posterior Forearm", "Lateral Forearm", "Medial Forearm"],
       "wrist" => ["Anterior Wrist", "Posterior Wrist", "Lateral Wrist", "Medial Wrist"],
