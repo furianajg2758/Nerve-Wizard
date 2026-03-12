@@ -7,6 +7,8 @@ class WizardController < ApplicationController
   before_action :set_steps
   before_action :setup_wizard
 
+
+
   def restart
     session[:concern_id] = nil
     session[:diagnostic_id] = nil
@@ -18,37 +20,58 @@ class WizardController < ApplicationController
   def sources
   end
 
-  def show
-    @concern = Concern.find(session[:concern_id])
-    @type = step.to_sym 
+def show
+  @concern = Concern.find(session[:concern_id])
+  @type = step.to_sym 
 
-    if @type == :refine_area
-      set_sub_regions
-      @display_title = "#{@concern.affected_areas&.titleize}: Specific Location"
-      @display_blurb = "Please narrow down exactly where you are feeling the symptoms."
-    end
+  # 1. Pre-load the data needed for the helper and scoring
+  @p = Array(@concern.paresthesia)
+  @s = Array(@concern.sensory)
+  @w = Array(@concern.weakness)
+  @r = Array(@concern.reflexes)
+  @area = @concern.affected_areas
 
-    if [:paresthesia, :sensory, :weakness, :reflexes].include?(@type)
-      location_slug = (@concern.specific_location.presence || @concern.affected_areas)
-                       &.downcase&.strip&.gsub(' ', '_')
-      
-      location_name = (@concern.specific_location.presence || @concern.affected_areas)&.titleize
-      
-      @metadata = step_metadata_for(@type)
-      @display_title = "#{location_name}: #{@metadata[:title]}"
-      @display_blurb = @metadata[:blurb]
-      
-      @current_options = symptom_options_for(location_slug, @type)
-
-      render "shared_symptoms_template" and return
-    end
-
-    if @type == :results
-      @matches = @concern.find_matches || []
-    end
-
-    render_wizard
+  # 2. Handle the "Refine Area" step
+  if @type == :refine_area
+    set_sub_regions
+    @display_title = "#{@concern.affected_areas&.titleize}: Specific Location"
+    @display_blurb = "Please narrow down exactly where you are feeling the symptoms."
   end
+
+  # 3. Handle the Symptom Picker steps
+  if [:paresthesia, :sensory, :weakness, :reflexes].include?(@type)
+    location_slug = (@concern.specific_location.presence || @concern.affected_areas)
+                     &.downcase&.strip&.gsub(' ', '_')
+    
+    location_name = (@concern.specific_location.presence || @concern.affected_areas)&.titleize
+    
+    @metadata = step_metadata_for(@type)
+    @display_title = "#{location_name}: #{@metadata[:title]}"
+    @display_blurb = @metadata[:blurb]
+    
+    @current_options = symptom_options_for(location_slug, @type)
+
+    render "shared_symptoms_template" and return
+  end
+
+  # 4. Handle the Results step
+  if @type == :results
+    @matches = @concern.find_matches || []
+    
+    if @matches.any?
+      max_score = @matches.first[:score]
+      
+      # Correctly grouping tied results
+      @tied_matches = @matches.select { |m| m[:score] == max_score }
+      @top_nerve_names = @tied_matches.map { |m| m[:nerve].name }
+      
+      @top_match = @matches.first 
+      @has_red_flag = @concern.red_flag?(@top_match)
+    end
+  end
+
+  render_wizard
+end
 
   def update
     if @concern.update(concern_params)
@@ -61,17 +84,20 @@ class WizardController < ApplicationController
   private
 
   def load_concern
-    if session[:concern_id].present?
-      @concern = Concern.find(session[:concern_id])
-    else
+  if session[:concern_id].present?
+    # Use find_by instead of find to avoid the "RecordNotFound" crash
+    @concern = Concern.find_by(id: session[:concern_id])
+    
+    # If the record was deleted (nil), create a new one
+    if @concern.nil?
       @concern = Concern.create!
       session[:concern_id] = @concern.id
     end
-
-    %i[paresthesia sensory weakness reflexes].each do |field|
-      @concern[field] ||= []
-    end
+  else
+    @concern = Concern.create!
+    session[:concern_id] = @concern.id
   end
+end
 
   def set_sub_regions
     region_map = {
@@ -103,10 +129,10 @@ class WizardController < ApplicationController
     maps = {
       paresthesia: {
         "head" => ["vertex of skull", "posterior head", "side of head", "forehead", "temple", "nose", "cheek", "ear", "upper lip", "mandible", "side of neck"],
-        "neck" => ["cheek", "posterior neck", "side of neck", "clavicular area"],
-        "anterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "medial upper arm", "medial elbow", "medial forearm"],
-        "posterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder"],
-        "lateral_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder"],
+        "neck" => ["cheek", "posterior neck", "side of neck",  "horizontal band along clavicle and upper scapula", "clavicular area"],
+        "anterior_shoulder" => ["horizontal band along clavicle and upper scapula", "anterior shoulder", "posterior shoulder", "lateral shoulder", "medial upper arm", "medial elbow", "medial forearm"],
+        "posterior_shoulder" => ["horizontal band along clavicle and upper scapula", "anterior shoulder", "posterior shoulder", "lateral shoulder"],
+        "lateral_shoulder" => ["horizontal band along clavicle and upper scapula", "anterior shoulder", "posterior shoulder", "lateral shoulder"],
         "anterior_upper_arm" => ["thumb", "index finger"],
         "posterior_upper_arm" => ["posterior upper arm", "index finger", "middle finger", "ring finger"],
         "lateral_upper_arm" => ["lateral upper arm", "lateral elbow", "index finger", "middle finger", "ring finger"],
@@ -152,10 +178,10 @@ class WizardController < ApplicationController
       },
       sensory: {
         "head" => ["vertex of skull", "posterior head", "side of head", "temple", "forehead", "cheek", "nose", "ear", "occiput", "upper lip", "mandible", "anterior neck", "posterior neck", "side of neck"],
-        "neck" => ["posterior cheek", "temple", "mandible", "anterior neck", "posterior neck", "side of neck"],
-        "anterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior upper arm", "medial upper arm", "anterior elbow", "medial elbow", "anterior forearm", "medial forearm"],
-        "posterior_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior elbow", "anterior upper arm", "anterior forearm"],
-        "lateral_shoulder" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior elbow", "anterior upper arm", "anterior forearm"],
+        "neck" => ["posterior cheek", "temple", "mandible", "anterior neck", "posterior neck", "side of neck", "clavicular area", "upper scapular area"],
+        "anterior_shoulder" => ["clavicular area", "upper scapular area", "anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior upper arm", "medial upper arm", "anterior elbow", "medial elbow", "anterior forearm", "medial forearm"],
+        "posterior_shoulder" => ["clavicular area", "upper scapular area", "anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior elbow", "anterior upper arm", "anterior forearm"],
+        "lateral_shoulder" => ["clavicular area", "upper scapular area", "anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior elbow", "anterior upper arm", "anterior forearm"],
         "anterior_upper_arm" => ["anterior shoulder", "posterior shoulder", "lateral shoulder", "anterior upper arm", "anterior elbow", "medial elbow", "anterior forearm", "lateral forearm", "lateral wrist", "radial hand", "thumb", "index finger"],
         "posterior_upper_arm" => ["posterior upper arm", "lateral upper arm", "posterior elbow", "lateral elbow", "lateral forearm", "anterior wrist", "radial hand", "index finger", "middle finger", "ring finger"],
         "lateral_upper_arm" => ["posterior upper arm", "lateral upper arm", "posterior elbow", "lateral elbow", "lateral forearm", "anterior wrist", "radial hand", "index finger", "middle finger", "ring finger"],
@@ -201,10 +227,10 @@ class WizardController < ApplicationController
       },
       weakness: {
         "head" => ["neck flexors", "neck side flexors"],
-        "neck" => ["neck side flexors"],
-        "anterior_shoulder" => ["shoulder abductors", "shoulder lateral rotators"],
-        "posterior_shoulder" => ["shoulder abductors", "shoulder lateral rotators"],
-        "lateral_shoulder" => ["shoulder abductors", "shoulder lateral rotators"],
+        "neck" => ["neck side flexors", "shoulder elevators"],
+        "anterior_shoulder" => ["shoulder elevators", "shoulder abductors", "shoulder lateral rotators"],
+        "posterior_shoulder" => ["shoulder elevators", "shoulder abductors", "shoulder lateral rotators"],
+        "lateral_shoulder" => ["shoulder elevators", "shoulder abductors", "shoulder lateral rotators"],
         "anterior_upper_arm" => ["shoulder abductors", "shoulder lateral rotators", "elbow flexors", "forearm supinators", "wrist extensors"],
         "posterior_upper_arm" => ["elbow extensors", "wrist flexors"],
         "lateral_upper_arm" => ["elbow extensors", "wrist flexors"],

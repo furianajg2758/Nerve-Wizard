@@ -20,84 +20,104 @@ def reflexes
   super || []
 end
 
-  # ----------------------------
-  # Normalize arrays consistently
-  # ----------------------------
-  def clean_list(list)
-    Array(list)
-      .map { |v| v.to_s.strip.downcase }
-      .reject { |v| v.blank? || v == "none" }
-  end
-
-
-
-  # ----------------------------
-  # Weakness scoring with multiplier
-  # ----------------------------
-  def score_weakness(user_input, nerve_ref, weight, match_list)
-    user_arr = clean_list(user_input)
-    db_arr   = clean_list(nerve_ref)
-
-    matches = user_arr & db_arr
-    matches.each { |m| match_list << m }
-
-    base = matches.count * weight
-    return base if matches.count <= 1
-
-    multiplier = 1.0 + (matches.count - 1) * 0.4
-    (base * multiplier).round
-  end
-
-
 
   # ----------------------------
   # Main matching engine
   # ----------------------------
- def find_matches
-    NerveReference.all.map do |nerve|
-      report = {
-        nerve: nerve,
-        score: 0,
-        details: { paresthesia: [], sensory: [], weakness: [], reflexes: [] }
-      }
+def find_matches
+  user_area = self.affected_areas.to_s.downcase.strip
+  user_specific = self.specific_location.to_s.downcase.strip
+  
+  NerveReference.all.map do |nerve|
+    report = {
+      nerve: nerve,
+      score: 0,
+      details: { paresthesia: [], sensory: [], weakness: [], reflexes: [] }
+    }
 
-      # --- 1. HARD FILTER ---
-      actual_user_weakness  = clean_list(self.weakness)
-      user_has_motor        = actual_user_weakness.any?
+    # --- 1. HARD FILTERS ---
+    actual_user_weakness = clean_list(self.weakness)
+    user_definitely_has_motor_symptoms = actual_user_weakness.any?
 
-      if user_has_motor && nerve.nerve_type == "sensory"
-        next nil
-      end
+    # Check if this nerve is sensory-only but the user has motor issues
+    next nil if user_definitely_has_motor_symptoms && nerve.nerve_type == "sensory"
 
-      # --- 2. AREA MATCH (Dynamic Scoring) ---
-      # Check for a match on the SPECIFIC location first
-      if nerve.specific_location.to_s.downcase == self.specific_location.to_s.downcase
-        report[:score] += 50 # High confidence for specific sub-area
-      elsif Array(nerve.affected_areas).map(&:downcase).include?(self.affected_areas.to_s.downcase)
-        report[:score] += 20 # Standard broad area match
-      end
+    # Define nerve variables for the Gate
+    nerve_areas = Array(nerve.affected_areas).map { |a| a.to_s.downcase.strip }
+    nerve_location = nerve.specific_location.to_s.downcase.strip
 
-      # --- 3. SYMPTOM CATEGORY SCORES ---
-      report[:score] += score_category(self.paresthesia, nerve.paresthesia, 5, report[:details][:paresthesia])
-      report[:score] += score_category(self.sensory,     nerve.sensory,     5, report[:details][:sensory])
-      report[:score] += score_weakness(self.weakness,    nerve.weakness,    10, report[:details][:weakness])
-      report[:score] += score_category(self.reflexes,    nerve.reflexes,    15, report[:details][:reflexes])
+    # THE GATE: Must match primary area OR specific location
+    gate_passed = nerve_areas.include?(user_area) || nerve_location == user_area || nerve_location == user_specific
+    next nil unless gate_passed
 
-      report
-    end.compact.select { |r| r[:score] > 0 }.sort_by { |r| -r[:score] }
+    # --- 2. AREA MATCH (Dynamic Scoring) ---
+    if nerve_location == user_specific && user_specific.present?
+      report[:score] += 50 
+    elsif nerve_areas.include?(user_area)
+      report[:score] += 20 
+    end
+
+    # --- 3. SYMPTOM CATEGORY SCORES ---
+    report[:score] += score_category(self.paresthesia, nerve.paresthesia, 5, report[:details][:paresthesia])
+    report[:score] += score_category(self.sensory,     nerve.sensory,     5, report[:details][:sensory])
+    report[:score] += score_weakness(self.weakness,    nerve.weakness,    10, report[:details][:weakness])
+    report[:score] += score_category(self.reflexes,    nerve.reflexes,    15, report[:details][:reflexes])
+
+    report
+  end.compact.select { |r| r[:score] > 0 }.sort_by { |r| -r[:score] }
+end
+
+def red_flag?(top_match)
+  red_flag_terms = ["saddle area", "perineum", "genitals", "bladder", "rectum"]
+  user_symptoms = clean_list(self.paresthesia) + clean_list(self.sensory)
+  
+  has_symptom = user_symptoms.any? { |s| red_flag_terms.any? { |term| s.include?(term) } }
+
+  is_s4 = top_match && top_match[:nerve].name.downcase.include?("s4")
+
+  has_symptom || is_s4
+end
+
+private
+
+def clean_list(list)
+  Array(list).flatten.compact.map { |i| i.to_s.downcase.strip }.reject { |i| i.blank? || i == "none" }
+end
+
+def score_category(user_list, nerve_list, points_per_match, details_array)
+  user_clean = clean_list(user_list)
+  nerve_clean = clean_list(nerve_list)
+
+  if user_clean.empty? && nerve_clean.empty?
+    return 10 
   end
 
+  matches = user_clean.select do |u|
+    nerve_clean.any? { |n| n.include?(u) || u.include?(n) }
+  end.uniq
 
+  details_array.concat(matches)
+  matches.size * points_per_match
+end
 
-  private
-
-  def score_category(user_input, nerve_ref, weight, match_list)
-    user_arr = clean_list(user_input)
-    db_arr   = clean_list(nerve_ref)
-
-    matches = user_arr & db_arr
-    matches.each { |m| match_list << m }
-
-    matches.count * weight
+def score_weakness(user_list, nerve_list, points_per_match, details_array)
+  user_clean = clean_list(user_list)
+  nerve_clean = clean_list(nerve_list)
+  
+  if user_clean.empty? && nerve_clean.empty?
+    return 10
   end
+  
+  matches = user_clean.select do |u|
+    nerve_clean.any? { |n| n.include?(u) || u.include?(n) }
+  end.uniq
+  
+  details_array.concat(matches)
+  
+  base = matches.size * points_per_match
+  return base if matches.size <= 1
+
+  multiplier = 1.0 + (matches.size - 1) * 0.4
+  (base * multiplier).round
+end
 end

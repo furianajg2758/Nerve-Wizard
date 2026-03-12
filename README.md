@@ -18,5 +18,6 @@ Things you may want to cover:
 
 ### To Do
 
-Upgrade to PostgresSQL
+Test each nerve in database to make sure it matches correctly
 
+* C1, C2 didn't match correctly

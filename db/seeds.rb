@@ -32,7 +32,7 @@ NerveReference.create!(
   sensory: ["temple", "forehead", "occiput"],
   weakness: ["neck flexors"],
   reflexes: [],
-  nerve_type: "sensory"
+  nerve_type: "mixed"
 )
 
 NerveReference.create!(
@@ -47,7 +47,7 @@ NerveReference.create!(
 
 NerveReference.create!(
   name: "C4 nerve root",
-  affected_areas: ["torso"],
+  affected_areas: ["neck", "shoulder", "torso"],
   paresthesia: ["horizontal band along clavicle and upper scapula"],
   sensory: ["clavicular area", "upper scapular area"],
   weakness: ["shoulder elevators"],
@@ -537,7 +537,7 @@ NerveReference.create!(
   paresthesia: ["lateral lower leg", "lateral ankle", "lateral foot", "lateral sole of foot", "medial sole of foot", "fourth toe", "fifth toe"],
   sensory: ["buttock", "posterior thigh", "posterior knee", "posterior lower leg", "posterior ankle"],
   weakness: ["hip extensors", "knee flexors", "ankle plantarflexors", "ankle everters"],
-  reflexes: ["Achilles"],
+  reflexes: ["achilles"],
   nerve_type: "mixed"
 )
 
@@ -547,7 +547,7 @@ NerveReference.create!(
   paresthesia: ["lateral knee", "lateral lower leg", "lateral ankle", "heel"],
   sensory: ["buttock", "posterior thigh", "posterior knee", "posterior lower leg", "posterior ankle"],
   weakness: ["knee flexors", "ankle plantarflexors"],
-  reflexes: ["Achilles"],
+  reflexes: ["achilles"],
   nerve_type: "mixed"
 )
 
@@ -587,7 +587,7 @@ NerveReference.create!(
   paresthesia: ["posterior lower leg", "lateral lower leg", "medial lower leg", "dorsum of foot", "lateral sole of foot", "medial sole of foot"],
   sensory: ["posterior lower leg", "lateral lower leg", "medial lower leg", "dorsum of foot", "lateral sole of foot", "medial sole of foot"],
   weakness: ["knee flexors", "ankle dorsiflexors", "ankle plantarflexors", "ankle everters", "ankle inverters"],
-  reflexes: ["Achilles"],
+  reflexes: ["achilles"],
   nerve_type: "mixed"
 )
 

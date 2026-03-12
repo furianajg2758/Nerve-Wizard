@@ -1,41 +1,134 @@
+<%# app/views/wizard/results.html.erb %>
+
 <div class="results-container">
-  <h2 class="mb-4">Potential Nerve Involvement</h2>
+  <h2>Assessment Results</h2>
 
-  <% if @matches.any? %>
-    <%# 1. Logic to split the matches %>
-    <% 
-      top_score = @matches.first[:score]
-      best_matches = @matches.select { |m| m[:score] == top_score }
-      other_matches = @matches.reject { |m| m[:score] == top_score }.first(3)
-    %>
-
-    <%# --- BEST MATCH SECTION --- %>
-    <section class="mb-5">
-      <div class="alert alert-success border-0 shadow-sm mb-4">
-        <h4 class="alert-heading fw-bold mb-1">Best Match</h4>
-        <p class="mb-0">This <%= best_matches.count > 1 ? "group of nerves matches" : "nerve matches" %> your symptoms most closely.</p>
+<% if @has_red_flag %>
+  <div class="modal fade" id="redFlagModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-danger border-3 shadow-lg">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">EMERGENCY RED FLAG</h5>
+        </div>
+        <div class="modal-body p-4">
+          <p class="lead fw-bold text-danger">Medical Alert: Possible Cauda Equina Syndrome</p>
+          <p>The symptoms selected (saddle area/bowel/bladder) or the suspected <strong>S4 nerve root</strong> involvement require immediate medical attention.</p>
+          <p class="mb-0">Please proceed to the nearest Emergency Department for evaluation.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger w-100 py-2 fw-bold" data-bs-dismiss="modal">I Understand</button>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <% best_matches.each do |result| %>
-        <%= render "nerve_result_card", result: result, border_class: "border-primary shadow" %>
-      <% end %>
-    </section>
+  <script>
+    document.addEventListener("turbo:load", function() {
+      const element = document.getElementById('redFlagModal');
+      if (element) {
+        const myModal = new bootstrap.Modal(element);
+        myModal.show();
+      }
+    });
+  </script>
+<% end %>
 
-    <%# --- NEXT BEST MATCHES SECTION --- %>
-    <% if other_matches.any? %>
-      <section>
-        <h5 class="text-muted mb-3">Next Best Matches</h5>
-        <% other_matches.each do |result| %>
-          <%= render "nerve_result_card", result: result, border_class: "border-light opacity-75" %>
-        <% end %>
-      </section>
+  <% if @top_match.present? %>
+    <%# --- 1. THE CLINICAL NOTE GENERATOR --- %>
+    <div data-controller="clinical-note">
+      <button type="button" 
+              class="btn btn-outline-primary mb-3" 
+              data-action="click->clinical-note#toggle">
+        Generate Clinical Note
+      </button>
+      
+      <div data-clinical-note-target="container" 
+           class="d-none mt-3 mb-5 p-4 bg-light border rounded shadow-sm">
+        
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+          <h6 class="text-secondary mb-0">Draft SOAP Note</h6>
+          <button type="button" class="btn-close" aria-label="Close" data-action="click->clinical-note#toggle"></button>
+        </div>
+
+        <p class="fst-italic mb-4" data-clinical-note-target="note">
+          <%= generate_clinical_note(@area, @p, @s, @w, @r, @top_match[:nerve].name) %>
+        </p>
+
+        <div class="clearfix">
+          <button type="button" class="btn btn-sm btn-primary float-end" data-action="click->clinical-note#copy">
+            Copy to Clipboard
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <%# --- 2. THE NERVE MATCH CARDS --- %>
+    <% active_matches = @matches.select { |m| m[:details].values.any?(&:any?) } %>
+    <% active_matches.each do |match| %>
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary"><%= match[:nerve].name.upcase %></h5>
+          <div class="match-evidence mt-2">
+            <h6 class="small text-muted fw-bold text-uppercase">Clinical Evidence:</h6>
+            <ul class="list-unstyled">
+
+              <%# PARESTHESIA SECTION %>
+              <% p_list = Array(match[:details][:paresthesia]).reject(&:blank?).uniq %>
+              <% if p_list.any? %>
+                <li class="small">
+                  <span class="badge bg-secondary">Paresthesia</span> 
+                  Reported tingling/altered sensation in <%= p_list.to_sentence %>.
+                </li>
+              <% end %>              
+
+              <%# SENSORY SECTION %>
+              <% s_list = Array(match[:details][:sensory]).flatten.reject(&:blank?).uniq %>
+              <% if s_list.any? %>
+                <li class="small mt-1">
+                  <span class="badge bg-info text-dark">Sensory</span> 
+                  Consistent with <%= s_list.to_sentence %> patterns.
+                </li>
+              <% end %>
+
+              <%# MOTOR SECTION %>
+              <% w_list = Array(match[:details][:weakness]).reject(&:blank?) %>
+              <% if w_list.any? %>
+                <li class="small mt-1">
+                  <span class="badge bg-warning text-dark">Motor</span> 
+                  Matches weakness in <%= w_list.to_sentence %>.
+                </li>
+              <% end %>
+
+              <%# REFLEX SECTION %>
+              <% r_list = Array(match[:details][:reflexes]).reject(&:blank?) %>
+              <% if r_list.any? %>
+                <li class="small mt-1">
+                  <span class="badge bg-danger">Reflex</span> 
+                  Matches diminished <%= r_list.to_sentence %>.
+                </li>
+              <% end %>
+              
+              <%# AREA FALLBACK %>
+              <% if s_list.empty? && w_list.empty? && r_list.empty? && p_list.empty? %>
+                <li class="small text-muted">Consistent with general <%= @area %> distribution.</li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
     <% end %>
 
-  <% else %>
-    <%# ... your existing No Matches block ... %>
+  <% else %> <%# This matches the 'if @top_match.present?' %>
+    <%# --- 3. THE "NO MATCH" FALLBACK --- %>
+    <div class="alert alert-info shadow-sm">
+      <h5 class="alert-heading">No Matches Identified</h5>
+      <p>Based on the symptoms selected for the <strong><%= @area %></strong>, no specific nerve or nerve root patterns were identified.</p>
+      <hr>
+      <p class="mb-0 small">Consider expanding your symptom selection or reviewing red flags.</p>
+    </div>
   <% end %>
 
-  <div class="mt-5 text-center">
+  <div class="mt-4">
     <%= link_to "Start Over", restart_path, class: "btn btn-outline-secondary px-4" %>
   </div>
 </div>
